@@ -1,0 +1,28 @@
+name: Sugerir uma melhoria
+description: Uma ideia para deixar o TorFaro melhor
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qual problema isso resolve?
+      description: Descreva a situação em que você sentiu falta disso.
+    validations:
+      required: true
+  - type: textarea
+    id: sugestao
+    attributes:
+      label: O que você sugere?
+    validations:
+      required: true
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas que você considerou
+  - type: checkboxes
+    id: regras
+    attributes:
+      label: Confirmação
+      options:
+        - label: A ideia respeita as [regras do projeto](https://github.com/Hirokyn/TorFaro/blob/main/CONTRIBUTING.md#regras-do-projeto), sem scraping nem alteração do Prowlarr
+          required: true

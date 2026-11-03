@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Manual do TorFaro
+    url: https://github.com/Hirokyn/TorFaro/blob/main/docs/MANUAL.md
+    about: Instalação, uso e solução de problemas.
+  - name: Falha de segurança
+    url: https://github.com/Hirokyn/TorFaro/blob/main/SECURITY.md
+    about: Não relate falhas de segurança em issues públicas.
+  - name: Suporte do Prowlarr
+    url: https://wiki.servarr.com/prowlarr
+    about: Dúvidas sobre indexadores e configuração do Prowlarr.

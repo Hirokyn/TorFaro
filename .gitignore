@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+ACESSO.md
+node_modules/
+.next/
+coverage/
+*.log
+next-env.d.ts
+*.tsbuildinfo

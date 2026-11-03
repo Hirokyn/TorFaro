@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    ports:
+      # A aplicação não tem login. Por padrão só atende esta máquina; veja o manual antes de abrir para a rede.
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-3000}:3000"
+    cpus: "1.0"
+    mem_limit: 768m
+    memswap_limit: 1g
+    pids_limit: 256
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 8s
+      retries: 3
+      start_period: 15s

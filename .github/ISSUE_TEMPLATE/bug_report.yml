@@ -1,0 +1,59 @@
+name: Relatar um problema
+description: Algo não funciona como deveria
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Não inclua sua API key, endereços da sua rede ou dados pessoais.
+        Falhas de segurança devem seguir a [política de segurança](https://github.com/Hirokyn/TorFaro/blob/main/SECURITY.md).
+  - type: textarea
+    id: problema
+    attributes:
+      label: O que aconteceu?
+      description: Conte o que você fez, o que esperava e o que aconteceu.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. Abra a guia Mais recentes
+        2. Marque o filtro 1080p
+        3. Veja o erro
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão ou commit do TorFaro
+    validations:
+      required: true
+  - type: input
+    id: prowlarr
+    attributes:
+      label: Versão do Prowlarr
+    validations:
+      required: true
+  - type: dropdown
+    id: instalacao
+    attributes:
+      label: Como foi instalado?
+      options:
+        - Docker Compose
+        - Node.js, sem Docker
+        - Outro
+    validations:
+      required: true
+  - type: input
+    id: navegador
+    attributes:
+      label: Navegador e sistema
+      placeholder: Chrome 140 no Windows 11
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Saída de `docker compose logs app`. Revise antes de colar.
+      render: shell
