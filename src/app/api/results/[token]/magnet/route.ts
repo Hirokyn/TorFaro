@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-import { openAction } from "@/lib/actions/resolve";
+import { openAsMagnet } from "@/lib/actions/details";
 import { resolveActionToken } from "@/lib/actions/tokens";
 import { clientId } from "@/lib/api/client-id";
 import { ApiError, jsonResponse, withErrors } from "@/lib/api/http";
@@ -12,10 +12,9 @@ export const GET = withErrors(async (request: NextRequest, context: RouteContext
   enforceRateLimit(`action:${client}`, 60, 60_000);
 
   const { token } = await context.params;
-  const resolved = await openAction(resolveActionToken(token, client), request.signal);
+  const resolved = await openAsMagnet(resolveActionToken(token, client), request.signal);
 
   if (resolved.kind !== "magnet") {
-    await resolved.body.cancel();
     throw new ApiError(422, "magnet_unavailable", "Este resultado só oferece arquivo .torrent.");
   }
 

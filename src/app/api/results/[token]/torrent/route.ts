@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-import { openAction } from "@/lib/actions/resolve";
+import { openAsMagnet } from "@/lib/actions/details";
 import { resolveActionToken } from "@/lib/actions/tokens";
 import { clientId } from "@/lib/api/client-id";
 import { ApiError, withErrors } from "@/lib/api/http";
@@ -23,7 +23,7 @@ async function openResult(request: NextRequest, context: TorrentContext) {
 
   const { token } = await context.params;
   const entry = resolveActionToken(token, client);
-  const resolved = await openAction(entry, request.signal);
+  const resolved = await openAsMagnet(entry, request.signal);
 
   // Redirecionar para magnet: faz o navegador entregar o link ao cliente de torrent padrão e manter a página aberta.
   if (resolved.kind === "magnet") {
@@ -33,15 +33,15 @@ async function openResult(request: NextRequest, context: TorrentContext) {
     });
   }
 
-  const headers = new Headers({
-    "Content-Type": "application/x-bittorrent",
-    "Content-Disposition": `attachment; filename="${torrentFilename(entry.result.title)}"`,
-    "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff",
+  return new Response(Buffer.from(resolved.bytes), {
+    headers: {
+      "Content-Type": "application/x-bittorrent",
+      "Content-Disposition": `attachment; filename="${torrentFilename(entry.result.title)}"`,
+      "Content-Length": String(resolved.bytes.byteLength),
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
   });
-  if (resolved.contentLength !== null) headers.set("Content-Length", String(resolved.contentLength));
-
-  return new Response(resolved.body, { headers });
 }
 
 // O botão é um link comum: sem esta página, um erro mostraria JSON bruto no navegador.

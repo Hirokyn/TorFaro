@@ -476,6 +476,65 @@ describe("GET /api/results/:token/details", () => {
     expect(body.details.infoHash).toMatch(/^[a-f0-9]{40}$/);
   });
 
+  function torrentFile() {
+    return benc({
+      announce: "http://tracker.invalid/announce",
+      info: {
+        name: "ubuntu",
+        "piece length": 262144,
+        pieces: "x".repeat(40),
+        files: [{ length: 100, path: ["a.iso"] }],
+      },
+    });
+  }
+
+  it("transforma .torrent em magnet para abrir o cliente de torrent", async () => {
+    stubProwlarr([
+      ...searchRoutes([upstreamResult()]),
+      { match: /^\/1\/download$/, respond: () => new Response(bytes(torrentFile())) },
+    ]);
+    const client = clientAddress();
+    const token = await firstToken(client);
+
+    const response = await torrent(appRequest(`/api/results/${token}/torrent`, client), tokenContext(token));
+    const location = new URL(response.headers.get("location") ?? "");
+
+    expect(response.status).toBe(302);
+    expect(location.protocol).toBe("magnet:");
+    expect(location.searchParams.get("xt")).toMatch(/^urn:btih:[a-f0-9]{40}$/);
+    expect(location.searchParams.get("dn")).toBe("ubuntu");
+    expect(location.searchParams.getAll("tr")).toEqual(["http://tracker.invalid/announce"]);
+  });
+
+  it("copiar magnet também funciona em fontes de .torrent", async () => {
+    stubProwlarr([
+      ...searchRoutes([upstreamResult()]),
+      { match: /^\/1\/download$/, respond: () => new Response(bytes(torrentFile())) },
+    ]);
+    const client = clientAddress();
+    const token = await firstToken(client);
+
+    const response = await magnet(appRequest(`/api/results/${token}/magnet`, client), tokenContext(token));
+
+    expect(response.status).toBe(200);
+    expect((await response.json()).magnetUrl).toMatch(/^magnet:\?xt=urn:btih:/);
+  });
+
+  it("mantém a lista de arquivos depois de abrir o ímã, sem baixar de novo", async () => {
+    const fetchMock = stubProwlarr([
+      ...searchRoutes([upstreamResult()]),
+      { match: /^\/1\/download$/, respond: () => new Response(bytes(torrentFile())) },
+    ]);
+    const client = clientAddress();
+    const token = await firstToken(client);
+
+    await torrent(appRequest(`/api/results/${token}/torrent`, client), tokenContext(token));
+    const { body } = await details(client, token);
+
+    expect(body.details.files).toEqual([{ path: "a.iso", size: 100 }]);
+    expect(requestsTo(fetchMock, "/1/download")).toHaveLength(1);
+  });
+
   it("mantém a página quando a fonte falha", async () => {
     stubProwlarr([
       ...searchRoutes([upstreamResult()]),
@@ -616,7 +675,7 @@ describe("ações de resultado", () => {
 
     const response = await torrent(appRequest(`/api/results/${token}/torrent`, client), tokenContext(token));
 
-    await expect(response.arrayBuffer()).rejects.toThrow();
+    expect(response.status).toBe(502);
   });
 
   it("mostra página de erro quando o link é aberto em navegação direta", async () => {

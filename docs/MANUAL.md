@@ -227,7 +227,7 @@ Empates seguem sempre a mesma regra: dia mais recente e, depois, mais seeders.
 
 Cada linha tem três ações:
 
-- **Ímã:** abre no seu cliente de torrent. Quando a fonte só oferece arquivo, baixa o `.torrent`.
+- **Ímã:** abre no seu cliente de torrent. Fontes que entregam `.torrent` têm o arquivo convertido em magnet pelo servidor, então o comportamento é o mesmo em todas.
 - **Copiar:** copia o link magnet.
 - **Origem:** abre a página do resultado no site original.
 
@@ -322,7 +322,7 @@ O Prowlarr suspende indexadores com falhas repetidas, às vezes por muitas horas
 Instale um cliente de torrent e associe a ele os links magnet no sistema operacional. Na primeira vez, o navegador pode pedir confirmação.
 
 **O ímã baixou um arquivo**
-Algumas fontes entregam `.torrent` em vez de magnet. Abra o arquivo no cliente de torrent.
+Acontece só quando o `.torrent` da fonte não pode ser lido para gerar o magnet. Abra o arquivo no cliente de torrent.
 
 **"Este link expirou"**
 Tokens duram 30 minutos e valem só no aparelho que fez a busca. Busque novamente.

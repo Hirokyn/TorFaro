@@ -29,7 +29,7 @@ O Prowlarr é ótimo para gerenciar indexadores e abastecer Sonarr e Radarr, mas
 - Filtros por seeders e por palavras no título, incluindo as que devem ficar de fora
 - Ordenação por qualquer coluna e paginação instantânea, sem repetir a consulta
 - Página de detalhes com trackers, infohash e, quando a fonte permite, a lista de arquivos
-- Botão de ímã que abre o seu cliente de torrent, como nos sites comuns
+- Botão de ímã que abre o seu cliente de torrent em todas as fontes, como nos sites comuns
 - Agrupamento de duplicados pelo infohash
 - Uma fonte lenta nunca derruba a busca: as demais aparecem normalmente
 - Links compartilháveis com termo e filtros, layout para celular e tema claro ou escuro automático

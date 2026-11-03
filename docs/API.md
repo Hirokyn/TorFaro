@@ -153,11 +153,11 @@ Devolve `{ "result": SearchResultDto, "details": TorrentDetails | null }`. `deta
 
 ## `GET /api/results/:token/magnet`
 
-Resolve o token e responde `{ "magnetUrl": "magnet:?..." }`. Responde 422 `magnet_unavailable` quando o resultado só oferece arquivo `.torrent`.
+Resolve o token e responde `{ "magnetUrl": "magnet:?..." }`. Quando a fonte entrega `.torrent`, o magnet é montado com o infohash e os trackers do arquivo. Responde 422 `magnet_unavailable` só quando esse arquivo não pode ser interpretado.
 
 ## `GET /api/results/:token/torrent`
 
-Transmite o `.torrent`, limitado a 10 MiB e 30 segundos, ou responde 302 para o `magnet:` quando o Prowlarr devolver um magnet.
+Responde 302 para o `magnet:`, inclusive o montado a partir de um `.torrent`, o que faz o navegador abrir o cliente de torrent. Só transmite o arquivo, limitado a 10 MiB e 30 segundos, quando ele não pode ser interpretado.
 
 Nas duas rotas de ação, token inexistente ou de outro IP responde 404, e token expirado responde 410. Nenhuma delas aceita URL vinda do cliente. Quando `/torrent` é aberta por navegação direta, os erros voltam como uma página HTML curta com link para a busca.
 
