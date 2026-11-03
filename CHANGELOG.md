@@ -2,6 +2,12 @@
 
 As mudanças relevantes do projeto ficam registradas aqui. O formato segue o [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/), e as versões seguem o [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [1.1.0] - 2026-11-03
+
+### Alterado
+
+- O botão de ímã abre o cliente de torrent em todas as fontes. Quando a fonte entrega um arquivo `.torrent`, como YTS e RuTor, o servidor monta o magnet com o infohash e os trackers do arquivo. O arquivo só é baixado se não puder ser lido.
+
 ## [1.0.0] - 2026-11-03
 
 Primeira versão pública.
@@ -17,3 +23,6 @@ Primeira versão pública.
 - Agrupamento de resultados pelo infohash
 - API key protegida no servidor, com tokens temporários
 - Instalação com Docker Compose
+
+[1.1.0]: https://github.com/Hirokyn/TorFaro/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/Hirokyn/TorFaro/releases/tag/v1.0.0
